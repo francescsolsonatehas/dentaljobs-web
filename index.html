@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentalJobs - Ofertas de trabajo para dentistas</title>
+    <link rel="stylesheet" href="style.css?v=4c16191">
+</head>
+<body>
+    <!-- Header -->
+    <header id="mainHeader">
+        <nav>
+            <div class="logo">🦷 DentalJobs</div>
+            <div class="nav-buttons" id="navButtonsLogueado">
+                <button class="btn-primary btn-small" id="btnPublicar" onclick="app.modal.abrirPublicar()" style="display: none;">Publicar</button>
+                <button class="btn-outline btn-small" id="btnChat" onclick="app.chat.abrir()" style="display: none; position: relative;">
+                    💬 <span id="chatBadge" style="display: none; background: #ef4444; color: white; border-radius: 50%; padding: 0.1rem 0.4rem; font-size: 0.7rem; position: absolute; top: -4px; right: -4px;">0</span>
+                </button>
+                <button class="btn-outline btn-small" id="btnNotif" onclick="app.notificaciones.togglePanel()" style="display: none; position: relative;" title="Notificaciones">
+                    🔔 <span id="notifBadge" style="display: none; background: #ef4444; color: white; border-radius: 50%; padding: 0.1rem 0.4rem; font-size: 0.7rem; position: absolute; top: -4px; right: -4px;">0</span>
+                </button>
+                <button class="btn-outline btn-small" id="btnPerfil" onclick="app.modal.abrirPerfil()" style="display: none;">Mi perfil</button>
+                <button class="btn-text btn-small" id="btnLogout" onclick="app.auth.logout()" style="display: none;">Logout</button>
+            </div>
+            <div class="nav-buttons-landing" id="navButtonsLanding" style="display: none;">
+                <button class="btn-primary" onclick="app.landing.seleccionarTipo('empresa')">🏥 Clínica</button>
+                <button class="btn-secondary" onclick="app.landing.seleccionarTipo('candidato')">👨‍⚕️ Dentista</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Panel de notificaciones (campana) -->
+    <div id="notifPanel" style="display: none; position: fixed; top: 62px; right: 12px; width: 340px; max-width: 92vw; max-height: 70vh; overflow-y: auto; background: white; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 3000;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; background: white;">
+            <strong style="color: #0f4c75;">Notificaciones</strong>
+            <button onclick="app.notificaciones.marcarTodasLeidas()" style="background: none; border: none; color: #0f4c75; cursor: pointer; font-size: 0.82rem;">Marcar todas leídas</button>
+        </div>
+        <div id="notifLista"></div>
+    </div>
+
+    <!-- Hero Landing -->
+    <section class="hero landing-hero" id="heroLanding">
+        <div class="landing-floating-bg top"></div>
+        <div class="landing-floating-bg bottom"></div>
+
+        <div class="landing-hero-content">
+            <div>
+                <h1 class="landing-hero-title">🦷 Tu plataforma de empleo en odontología</h1>
+                <p class="landing-hero-subtitle">Conecta clínicas dentales con profesionales especializados. Rápido, fácil y seguro.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; width: 100%; max-width: 600px;">
+                <div class="landing-feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <p class="feature-title">Rápido</p>
+                    <p class="feature-desc">Encuentra trabajo en días</p>
+                </div>
+                <div class="landing-feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <p class="feature-title">Seguro</p>
+                    <p class="feature-desc">Datos protegidos</p>
+                </div>
+                <div class="landing-feature-card">
+                    <div class="feature-icon">✨</div>
+                    <p class="feature-title">Fácil</p>
+                    <p class="feature-desc">Interfaz intuitiva</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="landingFeatures" class="landing-section bg-light">
+        <div class="landing-container">
+            <h2 class="landing-section-title">Cómo funciona</h2>
+            <div class="feature-grid">
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">1️⃣</div>
+                    <h3 style="color: #0f4c75; margin: 0 0 1rem 0;">Registrate</h3>
+                    <p style="margin: 0; color: #6b7280; line-height: 1.6;">Crea tu perfil en segundos. Ya sea como clínica o como profesional.</p>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">2️⃣</div>
+                    <h3 style="color: #0f4c75; margin: 0 0 1rem 0;">Busca o Publica</h3>
+                    <p style="margin: 0; color: #6b7280; line-height: 1.6;">Encuentra el trabajo perfecto o publica tu oferta al instante.</p>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">3️⃣</div>
+                    <h3 style="color: #0f4c75; margin: 0 0 1rem 0;">Conecta</h3>
+                    <p style="margin: 0; color: #6b7280; line-height: 1.6;">Comunícate directamente con tu contraparte.</p>
+                </div>
+                <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">4️⃣</div>
+                    <h3 style="color: #0f4c75; margin: 0 0 1rem 0;">Negocia</h3>
+                    <p style="margin: 0; color: #6b7280; line-height: 1.6;">Acuerda los términos y condiciones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="landingBenefitsDentistas" class="landing-section bg-white">
+        <div class="landing-container">
+            <h2 class="landing-section-title">Para Dentistas</h2>
+            <div class="benefits-grid">
+                <div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Acceso a ofertas exclusivas</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Perfil profesional destacado</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Notificaciones en tiempo real</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Seguimiento de postulaciones</span>
+                        </li>
+                    </ul>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">👨‍⚕️</div>
+                    <p style="color: #6b7280; font-size: 1.1rem; line-height: 1.8;">Encuentra la oportunidad de empleo que se ajuste a tus necesidades y expectativas profesionales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="landingBenefitsClinicas" class="landing-section bg-light">
+        <div class="landing-container">
+            <h2 class="landing-section-title">Para Clínicas</h2>
+            <div class="benefits-grid">
+                <div style="text-align: center; order: 2;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">🏥</div>
+                    <p style="color: #6b7280; font-size: 1.1rem; line-height: 1.8;">Encuentra los mejores profesionales dentales especializados para tu equipo.</p>
+                </div>
+                <div style="order: 1;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Base de candidatos verificados</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Filtros avanzados por especialidad</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Gestión de postulaciones</span>
+                        </li>
+                        <li style="margin: 1rem 0; display: flex; gap: 1rem; align-items: center;">
+                            <span style="font-size: 1.5rem;">✅</span>
+                            <span style="color: #6b7280;">Ahorra tiempo en selección</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Plataforma (oculto inicialmente) -->
+    <section class="hero" id="heroPlataforma" style="display: none;">
+        <h1>🦷 Ofertas de Trabajo</h1>
+    </section>
+
+    <!-- Stats -->
+    <div class="container" id="statsContainer" style="display: none;">
+        <div class="stats">
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats dinámicos -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="container" id="mainContainer" style="display: none;">
+        <!-- Banner de recordatorios -->
+        <div id="recordatoriosBanner" class="recordatorios-banner" style="display: none;"></div>
+
+        <!-- Onboarding: primeros pasos para activarse -->
+        <div id="onboardingCard" style="display: none;"></div>
+
+        <!-- Filtros -->
+        <div class="filters" id="filtros">
+            <h3 id="filtrosTitle">Todas las solicitudes</h3>
+
+            <div class="tipo-toggle">
+                <button class="active" id="btnTodas" onclick="app.filtros.mostrarTodas(this)">Clínicas</button>
+                <button id="btnPerfiles" onclick="app.filtros.mostrarPerfiles(this)" style="display: none;">👤 Perfiles</button>
+                <button id="btnMias" onclick="app.filtros.mostrarMias(this)" style="display: none;">Mis publicaciones</button>
+                <button id="btnPublicaciones" onclick="app.filtros.mostrarMisPublicaciones(this)" style="display: none;">Mis Publicaciones</button>
+                <button id="btnContactadas" onclick="app.filtros.mostrarContactadas(this)" style="display: none;">Contactadas</button>
+                <button id="btnFavoritos" onclick="app.filtros.mostrarFavoritos(this)" style="display: none;">⭐ Favoritos</button>
+                <button id="btnKanban" onclick="app.filtros.mostrarKanban(this)" style="display: none;">📌 Mis Postulaciones</button>
+                <button id="btnSuplencias" onclick="app.filtros.mostrarSuplencias(this)" style="display: none;">🚨 Suplencias</button>
+                <button id="btnMisPostulacionesDentistas" onclick="app.filtros.mostrarMisPostulacionesDentistas(this)" style="display: none;">Mis Postulaciones a Dentistas</button>
+                <button id="btnMisPostulacionesDentistasAceptadas" onclick="app.filtros.mostrarMisPostulacionesDentistasAceptadas(this)" style="display: none;">Mis Postulaciones a Dentistas Aceptadas</button>
+            </div>
+
+            <div style="margin: 0.75rem 0 0; display: flex; justify-content: flex-end;">
+                <button class="btn-outline btn-small" id="btnExportarCsv" onclick="app.exportar.vistaActual()" style="display: none;">⬇️ Exportar a CSV</button>
+            </div>
+
+            <div class="filter-row" id="filterRow">
+                <div class="filter-group">
+                    <label for="filterQ">Buscar</label>
+                    <input id="filterQ" placeholder="Ej: implantología, invisalign…" oninput="app.publicaciones.cargar()">
+                </div>
+                <div class="filter-group" id="filterCiudadGroup">
+                    <label for="filterCiudad">Ciudad</label>
+                    <input id="filterCiudad" placeholder="Ej: Madrid, Barcelona..." autocomplete="off" oninput="app.filtros.buscar()">
+                </div>
+                <!-- En la vista "Dentistas" la ciudad se elige de una lista con las ciudades que tienen dentistas -->
+                <div class="filter-group" id="filterCiudadListaGroup" style="display: none;">
+                    <label for="filterCiudadLista">Ciudad</label>
+                    <select id="filterCiudadLista" onchange="app.filtros.buscar()">
+                        <option value="">Todas las ciudades</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterRadio">Radio</label>
+                    <select id="filterRadio" onchange="app.filtros.buscar()" title="Busca a esta distancia de la ciudad indicada">
+                        <option value="">Solo esa ciudad</option>
+                        <option value="10">a 10 km</option>
+                        <option value="25">a 25 km</option>
+                        <option value="50">a 50 km</option>
+                        <option value="100">a 100 km</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterEspecialidad">Especialidad</label>
+                    <select id="filterEspecialidad" onchange="app.filtros.buscar()">
+                        <option value="">Todas las especialidades</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterContrato">Contrato</label>
+                    <select id="filterContrato" onchange="app.publicaciones.cargar()">
+                        <option value="">Todos los tipos</option>
+                        <option value="Indefinido">Indefinido</option>
+                        <option value="Temporal">Temporal</option>
+                        <option value="Autónomo">Autónomo</option>
+                        <option value="Prácticas">Prácticas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterJornada">Jornada</label>
+                    <select id="filterJornada" onchange="app.publicaciones.cargar()">
+                        <option value="">Todas las jornadas</option>
+                        <option value="Completa">Completa</option>
+                        <option value="Parcial">Parcial</option>
+                        <option value="Flexible">Flexible</option>
+                    </select>
+                </div>
+                <div class="filter-group" id="filterEquipamientoGroup" style="display: none;">
+                    <label for="filterEquipamiento">Equipamiento</label>
+                    <select id="filterEquipamiento" onchange="app.publicaciones.cargar()">
+                        <option value="">Cualquier equipamiento</option>
+                    </select>
+                </div>
+                <div class="filter-group" id="filterCertificacionGroup" style="display: none;">
+                    <label for="filterCertificacion">Certificación</label>
+                    <select id="filterCertificacion" onchange="app.publicaciones.cargar()">
+                        <option value="">Cualquier certificación</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterRetribucion">Retribución</label>
+                    <select id="filterRetribucion" onchange="app.publicaciones.cargar()">
+                        <option value="">Cualquiera</option>
+                        <option value="fijo">Salario fijo</option>
+                        <option value="porcentaje">% de facturación</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterSalarioMin">Salario mínimo</label>
+                    <input id="filterSalarioMin" type="number" placeholder="Ej: 20000" oninput="app.publicaciones.cargar()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterExperienciaMin">Años de experiencia</label>
+                    <input id="filterExperienciaMin" type="number" placeholder="Ej: 3" oninput="app.publicaciones.cargar()">
+                </div>
+                <div class="filter-group" id="filterFechaDesdeGroup" style="display: none;">
+                    <label for="filterFechaDesde">Disponible desde</label>
+                    <input id="filterFechaDesde" type="date" onchange="app.publicaciones.cargar()" title="Suplencias que cubren días a partir de esta fecha">
+                </div>
+                <div class="filter-group" id="filterFechaHastaGroup" style="display: none;">
+                    <label for="filterFechaHasta">hasta</label>
+                    <input id="filterFechaHasta" type="date" onchange="app.publicaciones.cargar()" title="Suplencias que cubren días hasta esta fecha">
+                </div>
+                <div class="filter-group" id="filterMiDisponibilidadGroup" style="display: none;">
+                    <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; margin-top: 1.4rem;" title="Solo suplencias con algún día que tienes marcado en tu disponibilidad">
+                        <input id="filterMiDisponibilidad" type="checkbox" onchange="app.publicaciones.cargar()">
+                        <span>🗓️ Encajan con mi disponibilidad</span>
+                    </label>
+                </div>
+                <div class="filter-group">
+                    <label for="filterOrden">Ordenar por</label>
+                    <select id="filterOrden" onchange="app.publicaciones.cargar()">
+                        <option value="recientes">Más recientes</option>
+                        <option value="salario">Salario</option>
+                        <option value="relevancia">Relevancia</option>
+                        <option value="compatibilidad" id="ordenCompatibilidad">🧩 Compatibilidad</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conmutador Lista / Calendario (solo en la vista de suplencias) -->
+        <div id="suplenciasVistaToggle" style="display: none; gap: 0.5rem; margin-bottom: 1rem;">
+            <button id="btnVistaLista" class="btn-outline btn-small active" onclick="app.suplenciasCalendario.verLista()">📋 Lista</button>
+            <button id="btnVistaCalendario" class="btn-outline btn-small" onclick="app.suplenciasCalendario.verCalendario()">📅 Calendario</button>
+        </div>
+
+        <!-- Vista de calendario mensual de suplencias -->
+        <div id="suplenciasCalendarioContainer" style="display: none;"></div>
+
+        <!-- Grid de publicaciones -->
+        <div id="publicacionesContainer"></div>
+
+        <!-- Modal: Mis alertas de búsqueda -->
+        <div id="modalAlertas" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🔔 Mis alertas de búsqueda</h2>
+                    <button class="close-btn" onclick="app.alertas.cerrar()">✕</button>
+                </div>
+                <div id="alertasBody" style="margin-bottom: 1.5rem;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Detalle de publicación -->
+    <div id="modalDetalle" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detalleTitle">Detalle</h2>
+                <button class="close-btn" onclick="app.modal.cerrarDetalle()">✕</button>
+            </div>
+            <div id="detalleBody" style="margin-bottom: 1.5rem;"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Publicar oferta/solicitud -->
+    <div id="modalPublicar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalPublicarTitle">Publicar nueva oferta</h2>
+                <button class="close-btn" onclick="app.modal.cerrarPublicar()">✕</button>
+            </div>
+
+            <div class="tabs" id="tabsPublicar" style="display: none;">
+                <button class="tab-btn active" id="tabBtnOferta" onclick="app.modal.switchTab('oferta')">Oferta fija</button>
+                <button class="tab-btn" id="tabBtnSuplencia" onclick="app.modal.switchTab('suplencia')" style="display: none;">🚨 Suplencia</button>
+                <button class="tab-btn" id="tabBtnSolicitud" onclick="app.modal.switchTab('solicitud')"></button>
+            </div>
+
+            <!-- Tab: Oferta -->
+            <div id="tab-oferta" class="tab-content active" class="tab-oferta-content">
+                <form onsubmit="event.preventDefault(); app.publicaciones.crear('oferta');">
+                    <div class="form-group">
+                        <label for="ofertaPlantillas">Plantilla</label>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <select id="ofertaPlantillas" onchange="app.plantillas.aplicar('oferta')" style="flex: 1;">
+                                <option value="">Sin plantilla…</option>
+                            </select>
+                            <button type="button" class="btn-outline btn-small" onclick="app.plantillas.guardar('oferta')" title="Guardar el formulario actual como plantilla">💾 Guardar</button>
+                            <button type="button" class="btn-text btn-small" onclick="app.plantillas.eliminar('oferta')" title="Eliminar la plantilla seleccionada">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="form-group" id="ofertaSedeGroup" style="display: none;">
+                        <label for="ofertaSede">Ubicación *</label>
+                        <select id="ofertaSede" onchange="app.sedes.aplicarAPublicacion('oferta')">
+                            <option value="">Elige una ubicación…</option>
+                        </select>
+                        <small id="ofertaSinSedes" style="display: none; color: #b45309; margin-top: 0.3rem;">Define la ciudad de tu clínica en "Mi perfil" → Mis datos, o crea un centro, antes de publicar.</small>
+                        <div id="ofertaSedePreview" style="margin-top: 0.6rem;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaCiudad">Ciudad</label>
+                        <input id="ofertaCiudad" type="text" readonly style="background: #f3f4f6;">
+                        <small style="color: var(--gray-600); margin-top: 0.3rem; display: block;">Se toma de la ubicación elegida.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidades</label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
+                          <input type="checkbox" id="ofertaMarcarTodas" onchange="app.publicaciones.marcarTodasEspecialidades('oferta')">
+                          <strong>Marcar todas</strong>
+                        </label>
+                        <div id="ofertaEspecialidadesContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                          <!-- Se llenarán dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaContrato">Contrato</label>
+                        <select id="ofertaContrato">
+                            <option value="">Seleccionar...</option>
+                            <option value="Indefinido">Indefinido</option>
+                            <option value="Temporal">Temporal</option>
+                            <option value="Autónomo">Autónomo</option>
+                            <option value="Prácticas">Prácticas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaJornada">Jornada</label>
+                        <select id="ofertaJornada">
+                            <option value="">Seleccionar...</option>
+                            <option value="Completa">Completa</option>
+                            <option value="Parcial">Parcial</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de retribución</label>
+                        <div style="display: flex; gap: 1.5rem; margin-bottom: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="ofertaRetribucionTipo" value="fijo" checked onchange="app.publicaciones.toggleRetribucion('oferta')">
+                                Salario fijo
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="ofertaRetribucionTipo" value="porcentaje" onchange="app.publicaciones.toggleRetribucion('oferta')">
+                                % de facturación
+                            </label>
+                        </div>
+                        <div id="ofertaSalarioFijoGroup" style="display: flex; gap: 0.5rem;">
+                            <input id="ofertaSalarioDesde" type="number" min="0" placeholder="Desde · ej: 2000 €/mes" style="flex: 1;">
+                            <input id="ofertaSalarioHasta" type="number" min="0" placeholder="Hasta · ej: 2500 €/mes" style="flex: 1;">
+                        </div>
+                        <div id="ofertaRetribucionPorcentajeGroup" style="display: none;">
+                            <input id="ofertaRetribucionPorcentaje" type="number" min="0" max="100" placeholder="Ej: 35 (% de facturación)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaExperiencia">Años de experiencia exigidos</label>
+                        <input id="ofertaExperiencia" type="number" min="0" placeholder="Ej: 3">
+                    </div>
+                    <div class="form-group" id="ofertaEquipamientoGroup" style="display: none;">
+                        <label>Equipamiento de la clínica</label>
+                        <div id="ofertaEquipamientoContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                          <!-- Se llenarán dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaDescripcion">Descripción *</label>
+                        <textarea id="ofertaDescripcion" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Preguntas de criba <span style="color: var(--gray-600); font-weight: normal;">(opcional, máx. 3)</span></label>
+                        <small style="color: var(--gray-600); display: block; margin-bottom: 0.5rem;">El candidato deberá responderlas al postularse.</small>
+                        <input class="ofertaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Cuántos años de experiencia en implantología tienes?" style="margin-bottom: 0.4rem;">
+                        <input class="ofertaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Tienes disponibilidad para trabajar los sábados?" style="margin-bottom: 0.4rem;">
+                        <input class="ofertaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Cuándo podrías incorporarte?">
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaNombreContacto">Empresa (de tu perfil)</label>
+                        <input id="ofertaNombreContacto" type="text" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaEmailContacto">Email de contacto (de tu perfil)</label>
+                        <input id="ofertaEmailContacto" type="email" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-group">
+                        <label for="ofertaTelefonoContacto">Teléfono (de la sede)</label>
+                        <input id="ofertaTelefonoContacto" type="tel" readonly style="background: #f3f4f6;">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Publicar oferta</button>
+                </form>
+            </div>
+
+            <!-- Tab: Solicitud -->
+            <div id="tab-solicitud" class="tab-content">
+                <form onsubmit="event.preventDefault(); app.publicaciones.crear('solicitud');">
+                    <div class="form-group">
+                        <label for="solicitudPlantillas">Plantilla</label>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <select id="solicitudPlantillas" onchange="app.plantillas.aplicar('solicitud')" style="flex: 1;">
+                                <option value="">Sin plantilla…</option>
+                            </select>
+                            <button type="button" class="btn-outline btn-small" onclick="app.plantillas.guardar('solicitud')" title="Guardar el formulario actual como plantilla">💾 Guardar</button>
+                            <button type="button" class="btn-text btn-small" onclick="app.plantillas.eliminar('solicitud')" title="Eliminar la plantilla seleccionada">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudCiudad">Ciudad</label>
+                        <input id="solicitudCiudad" type="text" readonly style="background: #f3f4f6;">
+                        <input id="solicitudProvincia" type="hidden">
+                        <small id="solicitudCiudadHint" style="color: var(--gray-600); margin-top: 0.3rem; display: block;">Se toma de tu perfil. Para cambiarla ve a "Mi perfil" → Mis datos.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidades</label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
+                          <input type="checkbox" id="solicitudMarcarTodas" onchange="app.publicaciones.marcarTodasEspecialidades('solicitud')">
+                          <strong>Marcar todas</strong>
+                        </label>
+                        <div id="solicitudEspecialidadesContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                          <!-- Se llenarán dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudContrato">Contrato</label>
+                        <select id="solicitudContrato">
+                            <option value="">Seleccionar...</option>
+                            <option value="Indefinido">Indefinido</option>
+                            <option value="Temporal">Temporal</option>
+                            <option value="Autónomo">Autónomo</option>
+                            <option value="Prácticas">Prácticas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudJornada">Jornada</label>
+                        <select id="solicitudJornada">
+                            <option value="">Seleccionar...</option>
+                            <option value="Completa">Completa</option>
+                            <option value="Parcial">Parcial</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudExperiencia">Años de experiencia</label>
+                        <input id="solicitudExperiencia" type="number" min="0" placeholder="Ej: 5">
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudDescripcion">Perfil y experiencia *</label>
+                        <textarea id="solicitudDescripcion" required placeholder="Cuéntanos sobre tu experiencia, especialización, habilidades..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudNombreContacto">Nombre *</label>
+                        <input id="solicitudNombreContacto" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudEmailContacto">email *</label>
+                        <input id="solicitudEmailContacto" type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="solicitudTelefonoContacto">Teléfono</label>
+                        <input id="solicitudTelefonoContacto" type="tel" placeholder="+34 xxx xxx xxx">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Publicar solicitud</button>
+                </form>
+            </div>
+
+            <!-- Tab: Suplencia / turno suelto -->
+            <div id="tab-suplencia" class="tab-content">
+                <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 0.9rem 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    <p style="margin: 0; font-size: 0.85rem; color: #7f1d1d;">Para cubrir una baja, vacaciones o un día suelto. Se muestra en la sección de Suplencias, donde los dentistas buscan disponibilidad inmediata.</p>
+                </div>
+                <form onsubmit="event.preventDefault(); app.publicaciones.crear('suplencia');">
+                    <div class="form-group" id="suplenciaSedeGroup" style="display: none;">
+                        <label for="suplenciaSede">Ubicación *</label>
+                        <select id="suplenciaSede" onchange="app.sedes.aplicarAPublicacion('suplencia')">
+                            <option value="">Elige una ubicación…</option>
+                        </select>
+                        <small id="suplenciaSinSedes" style="display: none; color: #b45309; margin-top: 0.3rem;">Define la ciudad de tu clínica en "Mi perfil" → Mis datos, o crea un centro, antes de publicar.</small>
+                        <div id="suplenciaSedePreview" style="margin-top: 0.6rem;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="suplenciaCiudad">Ciudad</label>
+                        <input id="suplenciaCiudad" type="text" readonly style="background: #f3f4f6;">
+                        <small style="color: var(--gray-600); margin-top: 0.3rem; display: block;">Se toma de la ubicación elegida.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidades</label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.5rem;">
+                          <input type="checkbox" id="suplenciaMarcarTodas" onchange="app.publicaciones.marcarTodasEspecialidades('suplencia')">
+                          <strong>Marcar todas</strong>
+                        </label>
+                        <div id="suplenciaEspecialidadesContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                          <!-- Se llenarán dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Días de la suplencia *</label>
+                        <p style="font-size: 0.82rem; color: #6b7280; margin: 0.2rem 0 0.6rem;">Marca en el calendario los días que necesitas cubrir. Pueden ser sueltos o seguidos.</p>
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 0.7rem;">
+                            <div class="form-group" style="margin: 0;">
+                                <label style="font-size: 0.8rem;">Añadir rango: desde</label>
+                                <input id="suplenciaRangoDesde" type="date">
+                            </div>
+                            <div class="form-group" style="margin: 0;">
+                                <label style="font-size: 0.8rem;">hasta</label>
+                                <input id="suplenciaRangoHasta" type="date">
+                            </div>
+                            <button type="button" class="btn-outline btn-small" onclick="app.publicaciones.anadirRangoCalendario('suplenciaCalendario','suplenciaRangoDesde','suplenciaRangoHasta')" style="margin-bottom: 0.15rem;">+ Añadir al calendario</button>
+                        </div>
+                        <div id="suplenciaCalendario"></div>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.8rem;">
+                        <input type="checkbox" id="suplenciaUrgente">
+                        🚨 Marcar como urgente
+                    </label>
+                    <div class="form-group">
+                        <label>Tipo de retribución</label>
+                        <div style="display: flex; gap: 1.5rem; margin-bottom: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="suplenciaRetribucionTipo" value="fijo" checked onchange="app.publicaciones.toggleRetribucion('suplencia')">
+                                Importe fijo
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: normal;">
+                                <input type="radio" name="suplenciaRetribucionTipo" value="porcentaje" onchange="app.publicaciones.toggleRetribucion('suplencia')">
+                                % de facturación
+                            </label>
+                        </div>
+                        <div id="suplenciaSalarioFijoGroup">
+                            <input id="suplenciaSalario" type="text" placeholder="Ej: 250€/día">
+                        </div>
+                        <div id="suplenciaRetribucionPorcentajeGroup" style="display: none;">
+                            <input id="suplenciaRetribucionPorcentaje" type="number" min="0" max="100" placeholder="Ej: 35 (% de facturación)">
+                        </div>
+                    </div>
+                    <div class="form-group" id="suplenciaEquipamientoGroup" style="display: none;">
+                        <label>Equipamiento de la clínica</label>
+                        <div id="suplenciaEquipamientoContainer" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                          <!-- Se llenarán dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="suplenciaDescripcion">Descripción *</label>
+                        <textarea id="suplenciaDescripcion" required placeholder="Motivo de la suplencia, horario, equipo disponible..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Preguntas de criba <span style="color: var(--gray-600); font-weight: normal;">(opcional, máx. 3)</span></label>
+                        <small style="color: var(--gray-600); display: block; margin-bottom: 0.5rem;">El candidato deberá responderlas al postularse.</small>
+                        <input class="suplenciaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Puedes incorporarte de inmediato?" style="margin-bottom: 0.4rem;">
+                        <input class="suplenciaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Tienes experiencia con nuestro software de gestión?" style="margin-bottom: 0.4rem;">
+                        <input class="suplenciaPregunta" type="text" maxlength="200" placeholder="Ej: ¿Cuándo podrías incorporarte?">
+                    </div>
+                    <div class="form-group">
+                        <label for="suplenciaNombreContacto">Empresa (de tu perfil)</label>
+                        <input id="suplenciaNombreContacto" type="text" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-group">
+                        <label for="suplenciaEmailContacto">Email de contacto (de tu perfil)</label>
+                        <input id="suplenciaEmailContacto" type="email" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-group">
+                        <label for="suplenciaTelefonoContacto">Teléfono (de la sede)</label>
+                        <input id="suplenciaTelefonoContacto" type="tel" readonly style="background: #f3f4f6;">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%; background: #ef4444;">Publicar suplencia</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Auth Empresa -->
+    <div id="modalAuthEmpresa" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏥 Acceso Empresa</h2>
+                <button class="close-btn" onclick="app.modal.cerrarAuthEmpresa()">✕</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="app.auth.switchAuthTab('loginEmpresa')">Login</button>
+                <button class="tab-btn" onclick="app.auth.switchAuthTab('registroEmpresa')">Registro</button>
+            </div>
+
+            <!-- Tab: Login Empresa -->
+            <div id="tab-loginEmpresa" class="tab-content active">
+                <form onsubmit="event.preventDefault(); app.auth.loginEmpresa();">
+                    <div class="form-group">
+                        <label for="loginEmailEmp">Email</label>
+                        <input id="loginEmailEmp" type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPasswordEmp">Contraseña</label>
+                        <input id="loginPasswordEmp" type="password">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
+                    <button type="button" class="btn-text btn-small" style="width: 100%; margin-top: 0.5rem;" onclick="app.auth.olvidePassword('loginEmailEmp')">¿Has olvidado tu contraseña?</button>
+                </form>
+            </div>
+
+            <!-- Tab: Registro Empresa -->
+            <div id="tab-registroEmpresa" class="tab-content">
+                <form onsubmit="event.preventDefault(); app.auth.registroEmpresa();">
+                    <div class="form-group">
+                        <label for="regNombreEmp">Nombre de clínica *</label>
+                        <input id="regNombreEmp" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmailEmp">Email *</label>
+                        <input id="regEmailEmp" type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPasswordEmp">Contraseña * (mínimo 8 caracteres)</label>
+                        <input id="regPasswordEmp" type="password" minlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regDireccionEmp">Dirección *</label>
+                        <input id="regDireccionEmp" type="text" placeholder="Calle, número, piso" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="regCodigoPostalEmp">Código Postal *</label>
+                            <input id="regCodigoPostalEmp" type="text" placeholder="28001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPaisEmp">País *</label>
+                            <select id="regPaisEmp" required>
+                                <option value="España" selected>España</option>
+                                <option value="Portugal">Portugal</option>
+                                <option value="Francia">Francia</option>
+                                <option value="Italia">Italia</option>
+                                <option value="Alemania">Alemania</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="regMovilEmp">Móvil *</label>
+                        <input id="regMovilEmp" type="tel" placeholder="+34 600 123 456" required>
+                    </div>
+                    <label class="consentimiento-registro">
+                        <input type="checkbox" id="regTerminosEmp" required>
+                        <span>He leído y acepto la <a href="privacidad.html" target="_blank">política de privacidad</a> y los <a href="terminos.html" target="_blank">términos de uso</a> *</span>
+                    </label>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Auth Candidato -->
+    <div id="modalAuthCandidato" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👨‍⚕️ Acceso Candidato</h2>
+                <button class="close-btn" onclick="app.modal.cerrarAuthCandidato()">✕</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="app.auth.switchAuthTab('loginCandidato')">Login</button>
+                <button class="tab-btn" onclick="app.auth.switchAuthTab('registroCandidato')">Registro</button>
+            </div>
+
+            <!-- Tab: Login Candidato -->
+            <div id="tab-loginCandidato" class="tab-content active">
+                <form onsubmit="event.preventDefault(); app.auth.loginCandidato();">
+                    <div class="form-group">
+                        <label for="loginEmailCand">Email</label>
+                        <input id="loginEmailCand" type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPasswordCand">Contraseña</label>
+                        <input id="loginPasswordCand" type="password">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Entrar</button>
+                    <button type="button" class="btn-text btn-small" style="width: 100%; margin-top: 0.5rem;" onclick="app.auth.olvidePassword('loginEmailCand')">¿Has olvidado tu contraseña?</button>
+                </form>
+            </div>
+
+            <!-- Tab: Registro Candidato -->
+            <div id="tab-registroCandidato" class="tab-content">
+                <form onsubmit="event.preventDefault(); app.auth.registroCandidato();">
+                    <div class="form-group">
+                        <label for="regNombreCand">Tu nombre *</label>
+                        <input id="regNombreCand" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmailCand">Email *</label>
+                        <input id="regEmailCand" type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPasswordCand">Contraseña * (mínimo 8 caracteres)</label>
+                        <input id="regPasswordCand" type="password" minlength="8" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regMovilCand">Móvil</label>
+                        <input id="regMovilCand" type="tel" placeholder="+34 600 123 456">
+                    </div>
+                    <label class="consentimiento-registro">
+                        <input type="checkbox" id="regTerminosCand" required>
+                        <span>He leído y acepto la <a href="privacidad.html" target="_blank">política de privacidad</a> y los <a href="terminos.html" target="_blank">términos de uso</a> *</span>
+                    </label>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Perfil -->
+    <div id="modalPerfil" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="perfilTitle">Mi perfil</h2>
+                <button class="close-btn" onclick="app.modal.cerrarPerfil()">✕</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" id="tabDatos" onclick="app.perfil.switchTab('datos')">Mis datos</button>
+                <button class="tab-btn" id="tabTrayectoria" onclick="app.perfil.switchTab('trayectoria')">Trayectoria</button>
+                <button class="tab-btn" id="tabCv" onclick="app.perfil.switchTab('cv')">Mi CV</button>
+                <button class="tab-btn" id="tabPortfolio" onclick="app.perfil.switchTab('portfolio')">Book</button>
+                <button class="tab-btn" id="tabDisponibilidad" onclick="app.perfil.switchTab('disponibilidad')">🗓️ Disponibilidad</button>
+                <button class="tab-btn" id="tabCompatibilidad" onclick="app.perfil.switchTab('compatibilidad')">🧩 Compatibilidad</button>
+                <button class="tab-btn" id="tabFotos" onclick="app.perfil.switchTab('fotos')">Fotos</button>
+            </div>
+
+            <!-- Tab: Test de compatibilidad (mismas preguntas para dentistas y clínicas) -->
+            <div id="tab-compatibilidad" class="tab-content">
+                <h4 style="color: #0f4c75; margin: 0 0 0.5rem 0;">🧩 Test de compatibilidad</h4>
+                <p id="compatibilidadIntro" style="color: #6b7280; font-size: 0.9rem; margin: 0 0 1rem;"></p>
+                <div id="compatibilidadPreguntas"></div>
+                <div id="compatibilidadPrioridades"></div>
+                <button class="btn-primary" style="margin-top: 1rem;" onclick="app.preferencias.guardar()">Guardar respuestas</button>
+            </div>
+
+            <!-- Tab: Mis datos -->
+            <div id="tab-datos" class="tab-content active">
+                <div id="misDatosContainer">
+                    <p style="text-align: center; color: #999;">Cargando...</p>
+                </div>
+            </div>
+
+            <!-- Tab: Disponibilidad para suplencias (dentistas) -->
+            <div id="tab-disponibilidad" class="tab-content">
+                <h4 style="color: #0f4c75; margin: 0 0 0.5rem 0;">🗓️ Mi disponibilidad para suplencias</h4>
+                <p style="color: #6b7280; font-size: 0.9rem; margin: 0 0 1rem;">Marca los días en los que podrías cubrir una suplencia. Ayuda a las clínicas a saber cuándo cuentan contigo, y podrás filtrar las suplencias por tus días libres.</p>
+                <div id="disponibilidadCalendario"></div>
+                <div style="margin-top: 1rem; padding: 0.85rem 1rem; background:#F8FAFF; border:1px solid #dbe4f0; border-radius:10px;">
+                    <label for="radioDesplazamiento" style="font-weight:600; color:#0f4c75; display:block; margin-bottom:.25rem;">📍 ¿Hasta dónde te desplazas?</label>
+                    <p style="color:#6b7280; font-size:.82rem; margin:0 0 .5rem;">Te avisaremos de suplencias dentro de este radio desde tu ciudad, no solo en tu ciudad exacta.</p>
+                    <select id="radioDesplazamiento" style="padding:.5rem .6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:.9rem;">
+                        <option value="0">Solo mi ciudad</option>
+                        <option value="10">Hasta 10 km</option>
+                        <option value="25">Hasta 25 km</option>
+                        <option value="50">Hasta 50 km</option>
+                        <option value="100">Hasta 100 km</option>
+                    </select>
+                </div>
+                <button class="btn-primary" style="margin-top: 1rem;" onclick="app.disponibilidad.guardar()">Guardar disponibilidad</button>
+            </div>
+
+            <!-- Tab: Trayectoria profesional -->
+            <div id="tab-trayectoria" class="tab-content">
+                <h4 style="color: #0f4c75; margin: 0 0 1rem 0;">💼 Experiencia laboral</h4>
+                <div id="trayectoriaExperienciaLista" style="margin-bottom: 1rem;"></div>
+                <form onsubmit="event.preventDefault(); app.trayectoria.crearExperiencia();" style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label for="expEspecialidad">Especialidad *</label>
+                        <select id="expEspecialidad" required>
+                            <option value="">Elige una especialidad…</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expLugar">Clínica / lugar</label>
+                        <input id="expLugar" type="text" placeholder="Ej: Clínica Dental Sonrisa, Barcelona">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="expInicio">Inicio</label>
+                            <input id="expInicio" type="month">
+                        </div>
+                        <div class="form-group">
+                            <label for="expFin">Fin</label>
+                            <input id="expFin" type="month">
+                        </div>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.8rem;">
+                        <input type="checkbox" id="expActual" onchange="document.getElementById('expFin').disabled = this.checked;">
+                        Trabajo aquí actualmente
+                    </label>
+                    <div class="form-group">
+                        <label for="expDescripcion">Descripción</label>
+                        <textarea id="expDescripcion" placeholder="Funciones, logros, especialización..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Añadir experiencia</button>
+                </form>
+
+                <h4 style="color: #0f4c75; margin: 0 0 1rem 0;">🎓 Formación</h4>
+                <div id="trayectoriaFormacionLista" style="margin-bottom: 1rem;"></div>
+                <form onsubmit="event.preventDefault(); app.trayectoria.crearFormacion();" style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label for="formTitulo">Título *</label>
+                        <input id="formTitulo" type="text" placeholder="Ej: Grado en Odontología" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="formCentro">Centro</label>
+                            <input id="formCentro" type="text" placeholder="Ej: Universidad de Barcelona">
+                        </div>
+                        <div class="form-group">
+                            <label for="formAnyo">Año</label>
+                            <input id="formAnyo" type="text" placeholder="2018">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Añadir formación</button>
+                </form>
+
+                <h4 style="color: #0f4c75; margin: 0 0 1rem 0;">🌐 Idiomas</h4>
+                <div id="trayectoriaIdiomasLista" style="margin-bottom: 1rem;"></div>
+                <form onsubmit="event.preventDefault(); app.trayectoria.crearIdioma();">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="idiomaNombre">Idioma *</label>
+                            <input id="idiomaNombre" type="text" placeholder="Ej: Inglés" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="idiomaNivel">Nivel *</label>
+                            <select id="idiomaNivel" required>
+                                <option value="">Elegir…</option>
+                                <option value="Básico">Básico</option>
+                                <option value="Intermedio">Intermedio</option>
+                                <option value="Avanzado">Avanzado</option>
+                                <option value="Nativo">Nativo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Añadir idioma</button>
+                </form>
+            </div>
+
+            <!-- Tab: CV -->
+            <div id="tab-cv" class="tab-content">
+                <div style="background: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                    <p style="margin: 0 0 0.75rem 0; font-size: 0.9rem; color: #0c4a6e;">¿No tienes CV a mano? Genera uno automáticamente con los datos de tu perfil (experiencia, especialidades y valoraciones).</p>
+                    <button class="btn-outline" style="width: 100%;" onclick="app.perfil.descargarCvPdf()">⬇️ Descargar mi CV en PDF</button>
+                </div>
+                <div id="cvPreview" style="margin-bottom: 1.5rem;"></div>
+                <div id="cvContainer">
+                    <div class="drag-drop-zone" id="cvDropZone" ondrop="event.preventDefault(); app.archivos.manejarDrop(event, 'cv')" ondragover="event.preventDefault(); document.getElementById('cvDropZone').classList.add('dragover')" ondragleave="document.getElementById('cvDropZone').classList.remove('dragover')">
+                        <p>📄 Sube tu CV (PDF, máx 5 MB)</p>
+                        <span>Arrastra y suelta o haz clic para seleccionar</span>
+                        <input type="file" id="cvInput" accept=".pdf" style="display: none;" onchange="app.archivos.subirCV()">
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="document.getElementById('cvInput').click()">Seleccionar archivo</button>
+                </div>
+            </div>
+
+            <!-- Tab: Portfolio -->
+            <div id="tab-portfolio" class="tab-content">
+                <div id="portfolioContainer">
+                    <div class="drag-drop-zone" id="portfolioDropZone" ondrop="event.preventDefault(); app.archivos.manejarDrop(event, 'portfolio')" ondragover="event.preventDefault(); document.getElementById('portfolioDropZone').classList.add('dragover')" ondragleave="document.getElementById('portfolioDropZone').classList.remove('dragover')">
+                        <p>🎨 Sube tu Book (PDF o imágenes, máx 25 MB)</p>
+                        <span>Arrastra y suelta o haz clic para seleccionar</span>
+                        <input type="file" id="portfolioInput" accept=".pdf,.jpg,.jpeg,.png,.gif" style="display: none;" onchange="app.archivos.subirPortfolio()">
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="document.getElementById('portfolioInput').click()">Añadir archivo</button>
+                    <div id="portfolioList" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Fotos de la clínica -->
+            <div id="tab-fotos" class="tab-content">
+                <div id="fotosContainer">
+                    <div class="drag-drop-zone" id="fotosDropZone" ondrop="event.preventDefault(); app.archivos.manejarDrop(event, 'foto')" ondragover="event.preventDefault(); document.getElementById('fotosDropZone').classList.add('dragover')" ondragleave="document.getElementById('fotosDropZone').classList.remove('dragover')">
+                        <p>📷 Sube fotos de tu clínica (JPG/PNG, máx 10 MB)</p>
+                        <span>Arrastra y suelta o haz clic para seleccionar</span>
+                        <input type="file" id="fotoInput" accept=".jpg,.jpeg,.png,.gif,.webp" style="display: none;" onchange="app.archivos.subirFoto()">
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin-top: 1rem;" onclick="document.getElementById('fotoInput').click()">Añadir foto</button>
+                    <div id="fotosGallery" class="fotos-gallery" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Sedes de la clínica. Ya no es una pestaña aparte: vive dentro de
+                 "Mis datos", que es donde la clínica gestiona lo suyo. Se queda aquí
+                 aparcado y app.perfil lo coloca dentro del formulario al abrirlo
+                 (así el marcado y la lógica de app.sedes no se duplican). -->
+            <div id="bloqueSedes" style="display: none;">
+                <h4 style="color: #0f4c75; margin: 0 0 1rem 0;">🏥 Centros</h4>
+                <div id="sedesLista" style="margin-bottom: 1.5rem;"></div>
+                <h4 style="color: #0f4c75; margin: 0 0 1rem 0;">➕ Añadir centro</h4>
+                <form onsubmit="event.preventDefault(); app.sedes.crear();">
+                    <div class="form-group">
+                        <label for="sedeNombre">Nombre del centro</label>
+                        <input id="sedeNombre" type="text" placeholder="Ej: Clínica Centro">
+                    </div>
+                    <div class="form-group">
+                        <label for="sedeCiudad">Ciudad *</label>
+                        <input id="sedeCiudad" type="text" placeholder="Escribe el municipio…" autocomplete="off" required>
+                        <input id="sedeProvincia" type="hidden">
+                        <small style="color: var(--gray-600); margin-top: 0.3rem; display: block;">Elige un municipio de la lista para fijar la provincia. <span id="sedeProvinciaLabel"></span></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="sedeDireccion">Dirección</label>
+                        <input id="sedeDireccion" type="text" placeholder="Calle, número">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="sedeCodigoPostal">Código Postal</label>
+                            <input id="sedeCodigoPostal" type="text" placeholder="08001">
+                        </div>
+                        <div class="form-group">
+                            <label for="sedeTelefono">Teléfono</label>
+                            <input id="sedeTelefono" type="tel" placeholder="+34 93 000 00 00">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Añadir centro</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Interesados -->
+    <!-- Modal: Opciones para Total Dentistas -->
+    <div id="modalOpcionesStats" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Dentistas</h2>
+                <button class="close-btn" onclick="document.getElementById('modalOpcionesStats').classList.remove('active')">✕</button>
+            </div>
+            <div style="padding: 2rem; text-align: center;">
+                <p style="margin-bottom: 1.5rem; color: var(--gray-600);">Selecciona por:</p>
+                <button onclick="app.stats.mostrarDesglosePorEspecialidad()" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">Especialidad</button>
+                <button onclick="app.stats.mostrarDesglosePorCiudad()" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">Ciudad</button>
+                <button onclick="app.stats.mostrarDesglosePorCiudadEspecialidad()" class="btn-primary" style="width: 100%;">Ciudad y Especialidad</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Opciones de Clínicas (para dentistas) -->
+    <div id="modalOpcionesClinicas" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Clínicas</h2>
+                <button class="close-btn" onclick="document.getElementById('modalOpcionesClinicas').classList.remove('active')">✕</button>
+            </div>
+            <div style="padding: 2rem; text-align: center;">
+                <p style="margin-bottom: 1.5rem; color: var(--gray-600);">Selecciona por:</p>
+                <button onclick="app.stats.mostrarClinicasPorEspecialidad()" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">Especialidad</button>
+                <button onclick="app.stats.mostrarClinicasPorCiudad()" class="btn-primary" style="width: 100%; margin-bottom: 1rem;">Ciudad</button>
+                <button onclick="app.stats.mostrarClinicasPorCiudadEspecialidad()" class="btn-primary" style="width: 100%;">Ciudad y Especialidad</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Interesados / Desglose de Stats -->
+    <div id="modalInteresados" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Interesados</h2>
+                <button class="close-btn" onclick="app.modal.cerrarInteresados()">✕</button>
+            </div>
+            <div id="interesadosBody"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Mis Postulaciones -->
+    <div id="modalPostulaciones" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mis Postulaciones</h2>
+                <button class="close-btn" onclick="app.modal.cerrarPostulaciones()">✕</button>
+            </div>
+            <div id="misPostulacionesContainer" style="padding: 1.5rem;"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Candidatos -->
+    <div id="modalCandidatos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Candidatos</h2>
+                <button class="close-btn" onclick="app.modal.cerrarCandidatos()">✕</button>
+            </div>
+            <div id="candidatosBody" style="padding: 1.5rem;"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Dentistas disponibles para una suplencia -->
+    <div id="modalDisponibles" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="disponiblesTitle">Dentistas disponibles</h2>
+                <button class="close-btn" onclick="document.getElementById('modalDisponibles').classList.remove('active')">✕</button>
+            </div>
+            <div id="disponiblesBody" style="padding: 1.5rem;"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Restablecer contraseña (desde enlace del correo) -->
+    <div id="modalRestablecer" class="modal">
+        <div class="modal-content" style="max-width: 440px;">
+            <div class="modal-header">
+                <h2>🔑 Nueva contraseña</h2>
+                <button class="close-btn" onclick="document.getElementById('modalRestablecer').classList.remove('active')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); app.auth.restablecerPassword();">
+                <div class="form-group">
+                    <label for="restablecerPassword">Nueva contraseña (mínimo 8 caracteres)</label>
+                    <input id="restablecerPassword" type="password" minlength="8" required>
+                </div>
+                <div class="form-group">
+                    <label for="restablecerPasswordConfirma">Repite la contraseña</label>
+                    <input id="restablecerPasswordConfirma" type="password" minlength="8" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Guardar contraseña</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Valorar (reseña) -->
+    <div id="modalResenya" class="modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2 id="resenyaTitle">⭐ Valorar</h2>
+                <button class="close-btn" onclick="document.getElementById('modalResenya').classList.remove('active')">✕</button>
+            </div>
+            <form onsubmit="event.preventDefault(); app.resenyas.enviar();">
+                <div class="form-group" style="text-align: center;">
+                    <div id="resenyaEstrellas" class="resenya-estrellas"></div>
+                    <small id="resenyaEstrellasTexto" style="color: var(--gray-600);">Elige una puntuación</small>
+                </div>
+                <div class="form-group">
+                    <label for="resenyaComentario">Comentario (opcional)</label>
+                    <textarea id="resenyaComentario" placeholder="¿Cómo fue la experiencia de trabajar juntos?"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Enviar valoración</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Chat / Mensajes -->
+    <div id="modalChat" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="chatTitle">💬 Mensajes</h2>
+                <button class="close-btn" onclick="app.chat.cerrar()">✕</button>
+            </div>
+            <div id="chatBody"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Postularse con mensaje -->
+    <div id="modalPostularseForm" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Postularme</h2>
+                <button class="close-btn" onclick="app.modal.cerrarPostularseModal()">✕</button>
+            </div>
+            <div id="postulacionError" style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: none; border-left: 4px solid #dc2626;"></div>
+            <form onsubmit="event.preventDefault(); app.candidaturas.enviarPostulacion();">
+                <div id="postulacionPreguntas"></div>
+                <div class="form-group">
+                    <label for="postulacionMensaje">Mensaje (opcional)</label>
+                    <textarea id="postulacionMensaje" placeholder="Cuéntale al empleador por qué eres un buen candidato..." style="min-height: 120px;"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Enviar postulación</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Contactar un perfil con mensaje -->
+    <div id="modalContactarPerfil" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="contactarPerfilTitulo">Contactar</h2>
+                <button class="close-btn" onclick="app.perfiles.cerrarContactarModal()">✕</button>
+            </div>
+            <div id="contactarPerfilError" style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: none; border-left: 4px solid #dc2626;"></div>
+            <form onsubmit="event.preventDefault(); app.perfiles.enviarContacto();">
+                <div class="form-group">
+                    <label for="contactarPerfilMensaje">Mensaje</label>
+                    <textarea id="contactarPerfilMensaje" placeholder="Escribe el mensaje que recibirá con tu solicitud de contacto..." style="min-height: 120px;"></textarea>
+                    <small style="color: #6b7280;">Verá este mensaje junto a tu solicitud. Podréis chatear cuando la acepte.</small>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer legal -->
+    <footer class="footer-legal">
+        <div>
+            <a href="aviso-legal.html">Aviso legal</a> ·
+            <a href="privacidad.html">Privacidad</a> ·
+            <a href="terminos.html">Términos de uso</a>
+        </div>
+        <div style="margin-top: 0.5rem;">© 2026 DentalJobs</div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="data/municipios-es.js"></script>
+    <script src="app.js?v=4c16191"></script>
+</body>
+</html>
