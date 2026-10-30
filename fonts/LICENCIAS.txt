@@ -1,0 +1,12 @@
+Tipografías incluidas en esta carpeta
+=====================================
+
+- Inter        © The Inter Project Authors (https://github.com/rsms/inter)
+- Poppins      © Indian Type Foundry (https://github.com/itfoundry/poppins)
+
+Ambas se distribuyen bajo la SIL Open Font License 1.1, que permite usarlas, copiarlas y
+servirlas desde un sitio web, también con fines comerciales.
+Texto completo de la licencia: https://openfontlicense.org
+
+Se descargaron de Google Fonts (subconjuntos latin y latin-ext) para servirlas desde la propia
+web y no depender de un tercero al cargar la página.
